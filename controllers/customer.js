@@ -22,16 +22,9 @@ class customerController {
                     .then(isMatch => {
                         if (isMatch) {
                             var accessToken = getAccessToken({ _id: data._id });
-                            var refreshToken = getRefeshToken({ _id: data._id });
                             console.log('accessToken', accessToken);
-                            console.log('refreshToken', refreshToken);
-
-                            res.cookie('token', accessToken); // Lưu access token vào cookie
-                            res.cookie('refreshToken', refreshToken); // Lưu refresh token vào cookie
-                            res.cookie('user', data);
-
                             console.log(data);
-                            return res.status(200).json({ status: 'success', data });
+                            return res.status(200).json({ status: 'success', data: { account: data, token: accessToken } });
                         } else {
                             console.log('hehehe');
                             return res.status(401).json({ status: 'error', message: 'Sai mật khẩu!!' });
@@ -95,10 +88,6 @@ class customerController {
 }
 function getAccessToken(data) {
     const plainData = { ...data, _id: data._id.toString() };
-    return jwt.sign(plainData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
-}
-function getRefeshToken(data) {
-    const plainData = { ...data, _id: data._id.toString() };
-    return jwt.sign(plainData, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+    return jwt.sign(plainData, process.env.ACCESS_TOKEN_SECRET);
 }
 module.exports = new customerController;

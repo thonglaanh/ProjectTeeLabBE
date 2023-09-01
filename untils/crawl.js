@@ -71,7 +71,7 @@ function extractImage($) {
     const imageUrls = [];
     $('.swiper-slide').each((index, element) => {
         const imageUrl = $(element).find('img').attr('data-image');
-        if (imageUrl) {
+        if (imageUrl && imageUrl.includes('https')) {
             imageUrls.push(imageUrl);
         }
     });

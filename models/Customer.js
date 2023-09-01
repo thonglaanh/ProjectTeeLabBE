@@ -6,7 +6,6 @@ const customerSchema = new Schema({
     email: String,
     password: String,
     date: Date,
-    gender: String
 }, {
     collection: 'customers',
     timestamps: true
