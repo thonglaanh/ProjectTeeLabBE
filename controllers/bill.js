@@ -6,13 +6,7 @@ class cartController {
         const customer = req.user;
         console.log(customer);
 
-        Bill.find({}).populate('customer').populate({
-            path: 'cart',
-            populate: {
-                path: 'product',
-                model: 'products'
-            }
-        }).then(data => {
+        Bill.find({}).populate('customer').populate('product').then(data => {
             res.status(200).json({ status: 'success', message: 'Get dữ liệu thành công', data });
         }).catch((error) => {
             res.status(500).json({ status: 'error', message: 'Đã xảy ra lỗi trong quá trình lấy dữ liệu ' + error });
