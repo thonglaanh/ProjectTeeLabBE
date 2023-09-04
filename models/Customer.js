@@ -6,6 +6,8 @@ const customerSchema = new Schema({
     email: String,
     password: String,
     date: Date,
+    phone: String,
+    img: String
 }, {
     collection: 'customers',
     timestamps: true

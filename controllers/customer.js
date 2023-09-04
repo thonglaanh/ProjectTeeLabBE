@@ -1,6 +1,7 @@
 const Customer = require('../models/Customer');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const fs = require('fs')
 class customerController {
     get(req, res, next) {
         Customer.find({}).then((customer) => {
@@ -27,7 +28,7 @@ class customerController {
                             return res.status(200).json({ status: 'success', data: { account: data, token: accessToken } });
                         } else {
                             console.log('hehehe');
-                            return res.status(401).json({ status: 'error', message: 'Sai mật khẩu!!' });
+                            return res.status(402).json({ status: 'error', message: 'Sai mật khẩu!!' });
                         }
                     })
                     .catch(error => {
@@ -60,7 +61,7 @@ class customerController {
                                 password: password,
                                 email: email,
                                 date: date,
-                                gender: gender
+                                img: 'https://ionicframework.com/docs/img/demos/avatar.svg'
 
                             })
                                 .then(() => {
@@ -82,6 +83,29 @@ class customerController {
             .catch((err) => {
                 res.status(500).json('Lỗi trong quá trình kiểm tra email : ' + err);
             });
+    }
+    update(req, res, next) {
+        console.log(req.body)
+        console.log(req.file)
+
+        const formData = req.body;
+        const id = req.params._id;
+        console.log(formData);
+        if (req.file) {
+            fs.rename(req.file.path, 'uploads/' + req.file.originalname, function (err) {
+                console.log(req.file.originalname);
+            });
+            formData.img = 'http://192.168.1.29:4000/uploads/' + req.file.originalname;
+        } else {
+            console.log('Không có ảnh');
+        }
+        Customer.findByIdAndUpdate(id, formData).then(() => {
+
+            res.json('Update thành công')
+        }).catch((err) => {
+            res.json('Update thất bại ' + err)
+        })
+
     }
 
 

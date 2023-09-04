@@ -12,6 +12,7 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 db.connect();
+app.use('/uploads', express.static('uploads'))
 route(app);
 app.listen(PORT, () => {
     console.log('Server started on port : ' + PORT);
