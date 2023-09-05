@@ -84,10 +84,7 @@ class customerController {
                 res.status(500).json('Lỗi trong quá trình kiểm tra email : ' + err);
             });
     }
-    update(req, res, next) {
-        console.log(req.body)
-        console.log(req.file)
-
+    async update(req, res, next) {
         const formData = req.body;
         const id = req.params._id;
         console.log(formData);
@@ -95,13 +92,14 @@ class customerController {
             fs.rename(req.file.path, 'uploads/' + req.file.originalname, function (err) {
                 console.log(req.file.originalname);
             });
-            formData.img = 'http://192.168.1.29:4000/uploads/' + req.file.originalname;
+            formData.img = 'http://localhost:4000/uploads/' + req.file.originalname;
         } else {
             console.log('Không có ảnh');
         }
-        Customer.findByIdAndUpdate(id, formData).then(() => {
+        Customer.findByIdAndUpdate(id, formData, { new: true }).then((customer) => {
+            console.log(customer);
 
-            res.json('Update thành công')
+            return res.status(200).json({ status: 'success', data: { account: customer } });
         }).catch((err) => {
             res.json('Update thất bại ' + err)
         })
